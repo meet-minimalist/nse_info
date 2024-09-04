@@ -41,7 +41,9 @@ class NseFetch:
         Returns:
             bool: True if the comp_info belongs to equity class else False.
         """
-        if "EQ" in comp_info["activeSeries"]:
+        # Meaning of these symbols:
+        # https://support.geojit.com/support/solutions/articles/89000007375-what-do-the-eq-be-bl-bt-il-etc-series-stand-for-on-nse-#:~:text=Equity,intraday%20trading%20is%20not%20allowed.
+        if comp_info["activeSeries"][0] in ["EQ", "BE"]:
             return True
         # For SME equities: https://www.nseindia.com/products-services/emerge-sme-market-segment
         # if ("SM" in comp_info['activeSeries']) or ("ST" in comp_info['activeSeries']) or ("SO" in comp_info['activeSeries']):
