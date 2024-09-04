@@ -1,9 +1,9 @@
 ##
 # @author Meet Patel <>
- # @file Description
- # @desc Created on 2024-09-04 8:21:17 pm
- # @copyright MIT License
- #
+# @file Description
+# @desc Created on 2024-09-04 8:21:17 pm
+# @copyright MIT License
+#
 
 from setuptools import find_packages, setup
 
@@ -14,12 +14,12 @@ setup(
     install_requires=[
         # List your package's dependencies here, e.g.,
         # 'numpy>=1.21.0',
-        'requests',
-        'pandas',
+        "requests",
+        "pandas",
     ],
     entry_points={
         "console_scripts": [
-            'nse_info = nse_info.main:main'
+            "nse_info = nse_info.main:main"
             # Define command-line scripts here if needed
         ],
     },

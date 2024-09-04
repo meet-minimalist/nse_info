@@ -4,14 +4,16 @@
 # @desc Created on 2024-07-27 11:44:56 pm
 # @copyright MIT License
 #
-from fetch_nse import NseFetch
-from concurrent.futures import ThreadPoolExecutor
 import argparse
-import pandas as pd
-from typing import List
 import os
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
-from utils.stock_code_helper import get_list_of_codes
+from typing import List
+
+import pandas as pd
+
+from .fetch_nse import NseFetch
+from .utils.stock_code_helper import get_list_of_codes
 
 
 def fetch_data_helper(nse: NseFetch, stock_codes: List[str]) -> pd.DataFrame:

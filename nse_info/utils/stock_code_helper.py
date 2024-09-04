@@ -4,8 +4,10 @@
 # @desc Created on 2024-09-01 4:27:18 pm
 # @copyright MIT License
 #
-import pandas as pd
+
 from typing import List
+
+import pandas as pd
 
 
 def check_code_exists(comp_code: str) -> bool:
