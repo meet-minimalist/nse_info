@@ -12,18 +12,17 @@ setup(
     version="0.1",
     packages=find_packages(),
     install_requires=[
-        # List your package's dependencies here, e.g.,
-        # 'numpy>=1.21.0',
-        "requests",
-        "pandas",
+        "matplotlib>=3.9.2",
+        "pandas>=2.2.2",
+        "requests>=2.32.3",
+        "seaborn>=0.13.2",
+
     ],
     entry_points={
         "console_scripts": [
             "nse_info = nse_info.main:main"
-            # Define command-line scripts here if needed
         ],
     },
-    # Additional metadata
     author="Meet Patel",
     # author_email='@example.com',
     description="NSE Info is a helper package which will fetch stocks information from NSE website.",
