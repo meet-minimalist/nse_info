@@ -9,7 +9,7 @@ from typing import Dict, Tuple
 
 import requests
 
-from .nse_stock import Stock
+from nse_stock import Stock
 
 
 class NseFetch:
