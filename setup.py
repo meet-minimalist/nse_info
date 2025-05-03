@@ -16,12 +16,9 @@ setup(
         "pandas>=2.2.2",
         "requests>=2.32.3",
         "seaborn>=0.13.2",
-
     ],
     entry_points={
-        "console_scripts": [
-            "nse_info = nse_info.main:main"
-        ],
+        "console_scripts": ["nse_info = nse_info.main:main"],
     },
     author="Meet Patel",
     # author_email='@example.com',

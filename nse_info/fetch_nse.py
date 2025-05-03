@@ -9,7 +9,7 @@ from typing import Dict, Tuple
 
 import requests
 
-from nse_stock import Stock
+from nse_info.nse_stock import Stock
 
 
 class NseFetch:
@@ -31,6 +31,10 @@ class NseFetch:
         response = self.session.get("http://nseindia.com", headers=self.headers)
         if response.status_code != 200:
             raise RuntimeError("NSE website is not responding.")
+        # Visit the market page to get additional cookies
+        self.session.get(
+            "http://nseindia.com/market-data/live-equity-market", headers=self.headers
+        )
 
     def is_eq(self, comp_info: Dict) -> bool:
         """
@@ -75,8 +79,8 @@ class NseFetch:
         url2 = "https://www.nseindia.com/api/quote-equity?symbol=" + symbol.replace(
             " ", "%20"
         ).replace("&", "%26")
-        data_1 = self.session.get(url1, headers=self.headers).json()
-        data_2 = self.session.get(url2, headers=self.headers).json()
+        data_1 = self.session.get(url1, headers=self.headers, timeout=30).json()
+        data_2 = self.session.get(url2, headers=self.headers, timeout=30).json()
 
         if data_1.get("marketDeptOrderBook", None) is None:
             raise RuntimeError(

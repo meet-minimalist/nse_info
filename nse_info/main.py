@@ -9,14 +9,15 @@ import logging
 import os
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
+from tqdm import tqdm
 from typing import Dict, List, Tuple
 
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 
-from fetch_nse import NseFetch
-from utils.stock_code_helper import get_list_of_codes
+from nse_info.fetch_nse import NseFetch
+from nse_info.utils.stock_code_helper import get_list_of_codes
 
 logging.getLogger("matplotlib").setLevel(logging.WARNING)
 logging.getLogger("urllib3").setLevel(logging.WARNING)
@@ -48,7 +49,9 @@ def setup_logger(log_level="info") -> logging.Logger:
     return logger
 
 
-def fetch_data_helper(nse: NseFetch, stock_codes: List[str]) -> pd.DataFrame:
+def fetch_data_helper(
+    nse: NseFetch, stock_codes: List[str], pbar: tqdm
+) -> pd.DataFrame:
     """
     Helper function to be executed inside each threads to fetch required data
     for given stock codes.
@@ -63,6 +66,7 @@ def fetch_data_helper(nse: NseFetch, stock_codes: List[str]) -> pd.DataFrame:
     res = []
     logger = logging.getLogger(__name__)
     for stock_code in stock_codes:
+        pbar.update(1)
         try:
             status, stock_info = nse.get_stock_info(stock_code)
         except RuntimeError as e:
@@ -102,16 +106,17 @@ def fetch_data(num_threads: int, output_dir: str) -> pd.DataFrame:
         ]
         stocks_splits.append(stock_codes_per_thread)
 
-    with ThreadPoolExecutor(max_workers=num_threads) as executor:
-        exec = [
-            executor.submit(fetch_data_helper, nse, stock_split)
-            for stock_split in stocks_splits
-        ]
+    with tqdm(total=len(all_stock_codes)) as pbar:
+        with ThreadPoolExecutor(max_workers=num_threads) as executor:
+            exec = [
+                executor.submit(fetch_data_helper, nse, stock_split, pbar)
+                for stock_split in stocks_splits
+            ]
 
-        comb_df = []
-        for e in exec:
-            comb_df.extend(e.result())
-        comb_df = pd.concat(comb_df)
+            comb_df = []
+            for e in exec:
+                comb_df.extend(e.result())
+            comb_df = pd.concat(comb_df)
 
     os.makedirs(output_dir, exist_ok=True)
     todays_date = datetime.today().strftime("%d_%m_%Y")
